@@ -1,23 +1,23 @@
 // contexts/AuthContext.js
 
 import React, { createContext, useState, useContext } from 'react';
-import firebase from '../lib/firebase';
+import { auth, provider, GoogleAuthProvider } from '../lib/firebase';
+import {signInWithPopup } from "firebase/auth";
 
 const AuthContext = createContext();
 
 
 const signInWithGoogle = async () => {
-  console.log("insde authcontext signinwgoogle");
-  const provider = new firebase.auth.GoogleAuthProvider();
-  console.log("insde authcontext signinwgoogle provider: ", provider);
+  console.log("inside authcontext signInWithGoogle");
+  console.log("inside authcontext signInWithGoogle provider: ");
   try {
-
-    const result = await firebase.auth().signInWithPopup(provider);
-    console.log("insde authcontext signinwgoogle result: ", result);
-
+    const result = await signInWithPopup(auth, provider);
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
     const user = result.user;
-    console.log("insde authcontext signinwgoogle user: ", user);
-
+    // IdP data available using getAdditionalUserInfo(result)
     const userData = {
       id: user.uid,
       email: user.email,
@@ -25,16 +25,23 @@ const signInWithGoogle = async () => {
       accountType: 'newsletter' // or 'advertiser', set it according to your needs
       // Include any other relevant user data here
     };
-    console.log("insde authcontext signinwgoogle userdata: ", userdata);
-
+    console.log("inside authcontext signInWithGoogle userData: ", userData);
     return userData;
-  } catch (error) {
-    console.log("insde authcontext signinwgoogle error: ", error);
-
+  } catch(error) {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
     console.error('Error signing in with Google:', error);
     throw error;
-  }
+  };
 };
+
+
 
 const authenticateUser = async (email, password) => {
 

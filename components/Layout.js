@@ -34,7 +34,6 @@ const Layout = ({ children }) => {
         console.log("here");
         try {
           await loginWithGoogle();
-          router.push('/');
         } catch (error) {
           console.error('Error logging in with Google:', error);
         }
