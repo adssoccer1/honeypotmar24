@@ -28,9 +28,10 @@ const Navbar = styled.div`
 `;
 
 const Layout = ({ children }) => {
-    const { user, login, logout } = useContext(AuthContext);
+    const { user, login, logout, loginWithGoogle } = useContext(AuthContext);
 
     const handleLoginWithGoogle = async () => {
+        console.log("here");
         try {
           await loginWithGoogle();
           router.push('/');

@@ -7,10 +7,17 @@ const AuthContext = createContext();
 
 
 const signInWithGoogle = async () => {
+  console.log("insde authcontext signinwgoogle");
   const provider = new firebase.auth.GoogleAuthProvider();
+  console.log("insde authcontext signinwgoogle provider: ", provider);
   try {
+
     const result = await firebase.auth().signInWithPopup(provider);
+    console.log("insde authcontext signinwgoogle result: ", result);
+
     const user = result.user;
+    console.log("insde authcontext signinwgoogle user: ", user);
+
     const userData = {
       id: user.uid,
       email: user.email,
@@ -18,8 +25,12 @@ const signInWithGoogle = async () => {
       accountType: 'newsletter' // or 'advertiser', set it according to your needs
       // Include any other relevant user data here
     };
+    console.log("insde authcontext signinwgoogle userdata: ", userdata);
+
     return userData;
   } catch (error) {
+    console.log("insde authcontext signinwgoogle error: ", error);
+
     console.error('Error signing in with Google:', error);
     throw error;
   }
