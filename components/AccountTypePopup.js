@@ -6,6 +6,7 @@ const AccountTypePopup = ({ user, onSave, onCancel }) => {
   const [accountType, setAccountType] = useState('');
   const [shopifyLink, setShopifyLink] = useState('');
 
+  console.log("accountTypepoup hit!!");
   const handleSubmit = () => {
     if (accountType === 'newsletter' || (accountType === 'advertiser' && shopifyLink)) {
       onSave({ accountType, shopifyLink });

@@ -57,7 +57,7 @@ const Leaderboard = ({ user }) => {
             <p>Description: {deal.description}</p>
             <p>Date: {deal.dateCreated}</p>
             {user && user.accountType === 'newsletter' && (
-                <ClaimOffer dealId={deal.id} user={user}/>
+                <ClaimOffer deal={deal} user={user}/>
             )}
             </DealItem>
         ))

@@ -4,7 +4,6 @@ import React, { createContext, useState, useContext } from 'react';
 import { auth, provider, GoogleAuthProvider, db } from '../lib/firebase';
 import {signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
 import { ref, set, get, update } from 'firebase/database';
-import AccountTypePopup from '../components/AccountTypePopup';
 
 const AuthContext = createContext();
 
@@ -43,9 +42,7 @@ const useAuthContext = () => {
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  console.log("isPopupOpen now: ", isPopupOpen)
 
   const signInWithGoogle = async () => {
     console.log("inside authcontext signInWithGoogle");
@@ -65,8 +62,7 @@ const AuthProvider = ({ children }) => {
       if (isNewUser) {
         console.log("inside authcontext signInWithGoogle popup");
   
-        openPopup();
-        //additionalData = await askUserAccountType(user);
+        additionalData = await askUserAccountType(user);
       } else {
         console.log("inside authcontext signInWithGoogle get uid");
   
@@ -79,8 +75,7 @@ const AuthProvider = ({ children }) => {
       if (!additionalData || !additionalData.accountType || (additionalData.accountType === "advertiser" && !additionalData.shopifyLink)) {
         console.log("inside authcontext signInWithGoogle getpopup");
   
-        //additionalData = await askUserAccountType(user);
-        openPopup();
+        additionalData = await askUserAccountType(user);
       }
   
       const userData = {
@@ -120,27 +115,10 @@ const AuthProvider = ({ children }) => {
     };
     return userData;
   };
-  
-  
-  
-  const openPopup = () => {
-    setIsPopupOpen(true);
-  };
-  
-  const closePopup = () => {
-    setIsPopupOpen(false);
-  };
+
   
 
-  const handleSave = async (additionalData) => {
-    const userId = user.uid;
-    const userRef = ref(db, `users/${userId}`);
-    await update(userRef, { ...additionalData });
-
-    // Update the user object with the additional data
-    setUser({ ...user, ...additionalData });
-    setIsPopupOpen(false);
-  };
+  
 
   const login = async (email, password) => {
     // Call your API to authenticate the user, then set the user state
@@ -160,13 +138,6 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{ user, login, logout, loginWithGoogle }}>
       {children}
-      {isPopupOpen && (
-        <AccountTypePopup
-          onSave={handleSave}
-          onCancel={closePopup}
-          user={user}
-        />
-      )}
     </AuthContext.Provider>
   );   
 };
