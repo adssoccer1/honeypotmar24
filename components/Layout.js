@@ -8,23 +8,37 @@ import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
 
 const Container = styled.div`
-  /* Container styles */
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 `;
 
 const Header = styled.header`
-  /* Header styles */
+  margin-bottom: 2rem;
 `;
 
 const Footer = styled.footer`
-  /* Footer styles */
+  margin-top: auto;
 `;
 
 const Content = styled.div`
-  /* Add styles for the content container here */
+  flex: 1;
 `;
 
-const Navbar = styled.div`
-  /* Add navbar styles here */
+const Navbar = styled.nav`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  & > * {
+    margin-right: 0.5rem;
+    padding: 0.25rem;
+  }
+
+  & > :last-child {
+    margin-right: 0;
+  }
 `;
 
 const Layout = ({ children }) => {
@@ -54,7 +68,6 @@ const Layout = ({ children }) => {
         <Header>
             {/* Add navigation links and user login/logout status */}
             <Navbar>
-                
                 {user ? (
                 <>
                     <div>{`Logged in as: ${user.accountType}`}</div>

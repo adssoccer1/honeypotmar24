@@ -1,80 +1,35 @@
 // contexts/AuthContext.js
 
 import React, { createContext, useState, useContext } from 'react';
-import { auth, provider, GoogleAuthProvider } from '../lib/firebase';
-import {signInWithPopup } from "firebase/auth";
+import { auth, provider, GoogleAuthProvider, db } from '../lib/firebase';
+import {signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
+import { ref, set, get, update } from 'firebase/database';
+import AccountTypePopup from '../components/AccountTypePopup';
 
 const AuthContext = createContext();
 
+const askUserAccountType = async (user) => {
+  const accountType = prompt("Are you creating a 'newsletter' or 'advertiser' account?");
 
-const signInWithGoogle = async () => {
-  console.log("inside authcontext signInWithGoogle");
-  console.log("inside authcontext signInWithGoogle provider: ");
-  try {
-    const result = await signInWithPopup(auth, provider);
-    // This gives you a Google Access Token. You can use it to access the Google API.
-    const credential = GoogleAuthProvider.credentialFromResult(result);
-    const token = credential.accessToken;
-    // The signed-in user info.
-    const user = result.user;
-    // IdP data available using getAdditionalUserInfo(result)
-    const userData = {
-      id: user.uid,
-      email: user.email,
-      // Map the user's accountType based on your app's requirements
-      accountType: 'newsletter' // or 'advertiser', set it according to your needs
-      // Include any other relevant user data here
-    };
-    console.log("inside authcontext signInWithGoogle userData: ", userData);
-    return userData;
-  } catch(error) {
-    // Handle Errors here.
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // The email of the user's account used.
-    const email = error.customData.email;
-    // The AuthCredential type that was used.
-    const credential = GoogleAuthProvider.credentialFromError(error);
-    // ...
-    console.error('Error signing in with Google:', error);
-    throw error;
-  };
-};
+  let additionalInfo = {};
 
-
-
-const authenticateUser = async (email, password) => {
-
-  // For testing purposes, return dummy userData without an API call
-  const userData = {
-    id: 1,
-    email: 'user@example.com',
-    accountType: 'newsletter', // or 'advertiser' or 'newsletter'
-    // Include any other relevant user data here
-  };
-  return userData;
-  /*
-  try {
-    // Replace this URL with your API endpoint for user authentication
-    const response = await fetch('https://your-api.com/authenticate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Authentication failed');
-    }
-
-    const userData = await response.json();
-    return userData;
-  } catch (error) {
-    console.error('Error authenticating user:', error);
-    throw error;
+  if (accountType === 'newsletter') {
+    additionalInfo.accountType = 'newsletter';
+  }else{
+    const shopifyLink = prompt("Please provide a link to your Shopify store.");
+    additionalInfo.shopifyLink = shopifyLink;
+    additionalInfo.accountType = 'advertiser';
   }
-  */
+
+  additionalInfo.email = user.email;
+  additionalInfo.dateCreated = new Date().toJSON();
+  additionalInfo.verified  = false;
+
+
+  const userRef = ref(db, `users/${user.uid}`);
+  await update(userRef, { accountType, ...additionalInfo });
+
+  return { accountType, ...additionalInfo };
 };
 
 const useAuthContext = () => {
@@ -85,8 +40,107 @@ const useAuthContext = () => {
   return context;
 };
 
+
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  console.log("isPopupOpen now: ", isPopupOpen)
+
+  const signInWithGoogle = async () => {
+    console.log("inside authcontext signInWithGoogle");
+    try {
+  
+      const result = await signInWithPopup(auth, provider);
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      // The signed-in user info.
+      const user = result.user;
+      const additionalUserInfo = getAdditionalUserInfo(result);
+      const isNewUser = additionalUserInfo.isNewUser;
+      console.log("inside authcontext signInWithGoogle user and isNewUser: ", user, " ", isNewUser);
+  
+      let additionalData = {};
+      if (isNewUser) {
+        console.log("inside authcontext signInWithGoogle popup");
+  
+        openPopup();
+        //additionalData = await askUserAccountType(user);
+      } else {
+        console.log("inside authcontext signInWithGoogle get uid");
+  
+        const userRef = ref(db, `users/${user.uid}`);
+        const snapshot = await get(userRef);
+        additionalData = snapshot.val();
+      }
+      console.log("inside authcontext signInWithGoogle additionalData: ", additionalData);
+  
+      if (!additionalData || !additionalData.accountType || (additionalData.accountType === "advertiser" && !additionalData.shopifyLink)) {
+        console.log("inside authcontext signInWithGoogle getpopup");
+  
+        //additionalData = await askUserAccountType(user);
+        openPopup();
+      }
+  
+      const userData = {
+        id: user.uid,
+        email: user.email,
+        ...additionalData,
+              // Include any other relevant user data here
+  
+      };
+      console.log("inside authcontext signInWithGoogle userData: ", userData);
+      return userData;
+    } catch (error) {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      // ...
+      console.error('Error signing in with Google:', error);
+      throw error;
+    
+    }
+  };
+  
+  
+  
+  const authenticateUser = async (email, password) => {
+  
+    // For testing purposes, return dummy userData without an API call
+    const userData = {
+      id: 1,
+      email: 'user@example.com',
+      accountType: 'advertiser', // or 'advertiser' or 'newsletter'
+      // Include any other relevant user data here
+    };
+    return userData;
+  };
+  
+  
+  
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+  
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+  
+
+  const handleSave = async (additionalData) => {
+    const userId = user.uid;
+    const userRef = ref(db, `users/${userId}`);
+    await update(userRef, { ...additionalData });
+
+    // Update the user object with the additional data
+    setUser({ ...user, ...additionalData });
+    setIsPopupOpen(false);
+  };
 
   const login = async (email, password) => {
     // Call your API to authenticate the user, then set the user state
@@ -106,8 +160,15 @@ const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{ user, login, logout, loginWithGoogle }}>
       {children}
+      {isPopupOpen && (
+        <AccountTypePopup
+          onSave={handleSave}
+          onCancel={closePopup}
+          user={user}
+        />
+      )}
     </AuthContext.Provider>
-  );
+  );   
 };
 
 export { AuthContext, AuthProvider, useAuthContext };

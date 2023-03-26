@@ -22,9 +22,11 @@ const copyToClipboard = (text) => {
     document.body.removeChild(textarea);
   };
   
-  const ClaimOffer = ({ dealId }) => {
+  const ClaimOffer = ({ dealId, user }) => {
+    
     const handleClick = () => {
-      const redirectLink = generateRedirectLink(dealId);
+        //has to get shopify link to redirect to and also userid to include in link. 
+      const redirectLink = generateRedirectLink(dealId, user);
       copyToClipboard(redirectLink);
       alert('The unique redirect link has been copied to your clipboard!');
     };
