@@ -3,10 +3,10 @@
 export default async function handler(req, res) {
     console.log("shopify install/unistall endpoint hit");
     if (req.method === 'POST') {
-      const { shopifyStoreUrl, action } = req.body;
-      console.log("shopify install/unistall endpoint url", shopifyStoreUrl, " and action ", action);
+      const { shopUrl, action } = req.body;
+      console.log("shopify install/unistall endpoint url", shopUrl, " and action ", action);
 
-      if (!shopifyStoreUrl || !action) {
+      if (!shopUrl || !action) {
         res.status(400).json({ error: 'Invalid request. Both shopifyStoreUrl and action are required.' });
         return;
       }
@@ -15,13 +15,13 @@ export default async function handler(req, res) {
         switch (action) {
           case 'install':
             // Handle the installation event
-            await handleInstall(shopifyStoreUrl);
+            await handleInstall(shopUrl);
             res.status(200).json({ message: 'Installation event processed successfully.' });
             break;
   
           case 'uninstall':
             // Handle the uninstallation event
-            await handleUninstall(shopifyStoreUrl);
+            await handleUninstall(shopUrl);
             res.status(200).json({ message: 'Uninstallation event processed successfully.' });
             break;
   
@@ -38,12 +38,12 @@ export default async function handler(req, res) {
     }
   }
   
-  async function handleInstall(shopifyStoreUrl) {
+  async function handleInstall(shopUrl) {
     // Add your logic for handling the installation event
-    console.log(`Handling installation for store: ${shopifyStoreUrl}`);
+    console.log(`Handling installation for store: ${shopUrl}`);
   }
   
-  async function handleUninstall(shopifyStoreUrl) {
+  async function handleUninstall(shopUrl) {
     // Add your logic for handling the uninstallation event
     console.log(`Handling uninstallation for store: ${shopifyStoreUrl}`);
   }
