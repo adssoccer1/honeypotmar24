@@ -86,8 +86,36 @@ async function handleInstall(shopUrl) {
 
       
   
-  async function handleUninstall(shopUrl) {
-    // Add your logic for handling the uninstallation event
-    console.log(`Handling uninstallation for store: ${shopUrl}`);
-  }
+    async function handleUninstall(shopUrl) {
+        // Add your logic for handling the uninstallation event
+        console.log(`Handling uninstallation for store: ${shopUrl}`);
+      
+        // Check and update advertiser users
+        const usersRef = ref(db, 'users');
+        const usersQuery = query(usersRef, orderByChild('shopUrl'), equalTo(shopUrl));
+      
+        const usersSnapshot = await get(usersQuery);
+        console.log('usersSnapshot:');
+      
+        if (usersSnapshot.exists()) {
+          usersSnapshot.forEach((userSnapshot) => {
+            const userId = userSnapshot.key;
+            update(ref(db, `users/${userId}`), { verifiedUrl: false });
+          });
+        }
+      
+        // Check and update verifiedShops
+        const verifiedShopsRef = ref(db, 'verifiedShops');
+        const verifiedShopsQuery = query(verifiedShopsRef, orderByChild('shopUrl'), equalTo(shopUrl));
+      
+        const verifiedShopsSnapshot = await get(verifiedShopsQuery);
+      
+        if (verifiedShopsSnapshot.exists()) {
+          verifiedShopsSnapshot.forEach((shopSnapshot) => {
+            const shopId = shopSnapshot.key;
+            update(ref(db, `verifiedShops/${shopId}`), { installed: false });
+          });
+        }
+      }
+      
   
