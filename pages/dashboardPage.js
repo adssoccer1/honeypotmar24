@@ -1,16 +1,22 @@
-// pages/dashboard.js
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from '../components/Layout';
 import Dashboard from '../components/Dashboard';
 import { useAuthContext } from '../contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 const DashboardPage = () => {
   const { user } = useAuthContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/');
+    }
+  }, [user, router]);
 
   return (
     <Layout>
-      <Dashboard user={user} />
+      {user && <Dashboard user={user} />}
     </Layout>
   );
 };

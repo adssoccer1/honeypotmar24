@@ -43,7 +43,8 @@ export default async function handler(req, res) {
         id: newCompletedSaleId,
         dollarAmount,
         time: new Date().toJSON(),
-        userId: uniqueLink.userId,
+        newsletterId: uniqueLink.newsletterId,
+        advertiserId: uniqueLink.advertiserId,
         dealId: uniqueLink.dealId,
         uniqueLinkId: uniqueLinkId
       };

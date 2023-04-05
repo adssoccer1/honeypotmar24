@@ -13,7 +13,7 @@ const SubmitDeal = ({user}) => {
     commission: '',
     shopurl: user.shopifyLink,
     ownerEmail: user.email,
-    ownerId: user.id,
+    advertiserId: user.id,
     dateCreated: new Date().toJSON()
     // Add other required fields here
   });

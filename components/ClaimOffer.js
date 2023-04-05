@@ -15,7 +15,7 @@ const generateRedirectLink = async (deal, user) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId: user.id, shopifyLink: (deal.shopurl ? deal.shopurl : 'test.com'), dealId: deal.id }),
+        body: JSON.stringify({ userId: user.id, shopifyLink: (deal.shopurl ? deal.shopurl : 'test.com'), deal: deal }),
       });
       console.log("at generateRedirectLink data returned, ", response);
 

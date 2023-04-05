@@ -91,7 +91,7 @@ const Layout = ({ children }) => {
                 )}
                 {/* Add the Dashboard link */}
                 {user && (
-                    <Link href="/dashboard">
+                    <Link href="/dashboardPage">
                         Dashboard
                     </Link>
                 )}

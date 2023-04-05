@@ -33,7 +33,7 @@ export default async function handler (req, res) {
         res.status(200).json({ message: 'Deal added successfully' });
     } catch (error) {
         console.error('Error creating deal:', error);
-        res.status(500).json({ message: 'Error creating deal:'});
+        return res.status(500).json({ message: 'Error creating deal:'});
     }
   }
 }

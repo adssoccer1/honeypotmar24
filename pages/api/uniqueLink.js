@@ -17,8 +17,11 @@ const checkExistingLink = async (userId, dealId) => {
     return null;
   };
 
-const createUniqueLink = async (userId, shopifyLink, dealId) => {
+const createUniqueLink = async (userId, shopifyLink, deal) => {
     console.log("at createUniqueLink before db request, ", shopifyLink);
+    console.log("at createUniqueLink w deal, ", deal);
+
+    const dealId = deal.id;
 
     const existingLink = await checkExistingLink(userId, dealId);
 
@@ -29,13 +32,15 @@ const createUniqueLink = async (userId, shopifyLink, dealId) => {
   const newUniqueLinkId = push(ref(db, 'uniqueLinks')).key;
 
   const url = `https://example.com/redirect/?id=${newUniqueLinkId}`;
+  console.log("need to replace ths wth an envronment varable");
   const newUniqueLink = {
     id: newUniqueLinkId,
-    userId,
-    dealId,
+    newsletterId: userId,
+    advertiserId: deal.advertiserId,
     userId_dealId: `${userId}_${dealId}`, // Add this field to make querying easier
     shopifyLink,
     clicks: 0,
+    dealId,
     url: url,
     purchaseEvents: 0,
     dateCreated: new Date().toJSON(),
@@ -52,11 +57,11 @@ const createUniqueLink = async (userId, shopifyLink, dealId) => {
 export default async function handler(req, res) {
 
   if (req.method === 'POST') {
-    const { userId, shopifyLink, dealId } = req.body;
-    console.log("at unque lnk handler ", dealId);
+    const { userId, shopifyLink, deal } = req.body;
+    console.log("at unque lnk handler ", deal);
 
     try {
-        const uniqueLink = await createUniqueLink(userId, shopifyLink, dealId);
+        const uniqueLink = await createUniqueLink(userId, shopifyLink, deal);
         console.log("at unque lnk handler 200 res: ", uniqueLink);
 
         res.status(200).json({ uniqueLink });
