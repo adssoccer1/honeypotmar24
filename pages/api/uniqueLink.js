@@ -31,7 +31,7 @@ const createUniqueLink = async (userId, shopifyLink, deal) => {
 
   const newUniqueLinkId = push(ref(db, 'uniqueLinks')).key;
 
-  const url = `https://example.com/redirect/?id=${newUniqueLinkId}`;
+  const url = `http://localhost:3000/api/redirect/?id=${newUniqueLinkId}`;
   console.log("need to replace ths wth an envronment varable");
   const newUniqueLink = {
     id: newUniqueLinkId,

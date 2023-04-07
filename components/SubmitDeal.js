@@ -28,6 +28,10 @@ const SubmitDeal = ({user}) => {
   };
 
   const handleSubmit = async (e) => {
+    if(!user.verified){
+      alert("your account has not been verified for posting deals, please visit your dashboard to see if you are missing any account information");
+      return;
+    }
     e.preventDefault();
     console.log(dealData);
     try {

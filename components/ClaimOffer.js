@@ -52,6 +52,10 @@ const ClaimOffer = ({ deal, user }) => {
   };
 
   const handleClick = async () => {
+    if(!user.verified){
+      console.log("your newsletter account is not yet verified. please go to your dashboard and enter missing information before you can claimOffer");
+      return
+    }
     if (uniqueLink) {
       console.log("link already generated: ", uniqueLink);
       copyToClipboard(uniqueLink);

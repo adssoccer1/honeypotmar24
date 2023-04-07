@@ -3,6 +3,9 @@ import Layout from '../components/Layout';
 import Dashboard from '../components/Dashboard';
 import { useAuthContext } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
+import { Layout as AntLayout } from 'antd';
+
+const { Header, Content, Footer } = AntLayout;
 
 const DashboardPage = () => {
   const { user } = useAuthContext();
@@ -15,9 +18,17 @@ const DashboardPage = () => {
   }, [user, router]);
 
   return (
-    <Layout>
-      {user && <Dashboard user={user} />}
-    </Layout>
+    <AntLayout>
+      <Content>
+        <Layout>
+          {user && <Dashboard user={user} />}
+        </Layout>
+      </Content>
+      <Footer style={{ textAlign: 'center' }}>
+        {/* Footer content */}
+        Honeypot ©{new Date().getFullYear()} - Created by YourCompanyName
+      </Footer>
+    </AntLayout>
   );
 };
 

@@ -55,6 +55,8 @@ const AuthProvider = ({ children }) => {
       // The signed-in user info.
       const user = result.user;
       const additionalUserInfo = getAdditionalUserInfo(result);
+      console.log("need to get rid of isNewUser here as could cause disagreements between ourdb and firebases auth. instead we will prompt users for verify level info when they try to interact with the leaderboard. ");
+
       const isNewUser = additionalUserInfo.isNewUser;
       console.log("inside authcontext signInWithGoogle user and isNewUser: ", user, " ", isNewUser);
   
