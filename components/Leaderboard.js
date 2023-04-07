@@ -48,9 +48,10 @@ const Leaderboard = ({ user }) => {
           style={{ width: '80%', maxWidth: '800px' }}
           renderItem={(deal, index) => (
             <List.Item
+              key={deal.id}
               actions={
                 user && user.accountType === 'newsletter'
-                  ? [<ClaimOffer deal={deal} user={user} />]
+                  ? [<ClaimOffer key={deal.id} deal={deal} user={user} />]
                   : []
               }
             >
