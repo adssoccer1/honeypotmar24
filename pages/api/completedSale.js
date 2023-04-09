@@ -1,5 +1,6 @@
 // pages/api/completedSale.js
 
+//this class listens for requests from the shopify app to enter logs/reciepts of completed sales into our firebase db
 import { db } from '../../lib/firebase';
 import { ref, push, set, get } from 'firebase/database';
 

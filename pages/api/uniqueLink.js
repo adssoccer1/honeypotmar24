@@ -1,5 +1,8 @@
 // pages/api/uniqueLink.js
 
+
+//this class generate the unique link when a newsletter clicks "claim offer" on a "Deal" in the leaderboard. 
+//the unique link is stored in firebase with the necessary fields. 
 import { auth, db } from '../../lib/firebase';
 import { ref, set, update, get, push, query, equalTo, orderByChild } from 'firebase/database';
 

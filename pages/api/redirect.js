@@ -1,5 +1,7 @@
 // pages/api/redirect.js
 
+//this class listens for clicks on the "uniqueurls". When a click happens the user is sent here where a click through event is 
+//recorded and the user is immediately redirected to the original advertiser's shopify store with a utm_code that can be tracked for purchases.
 import { db } from '../../lib/firebase';
 import { ref, update, get } from 'firebase/database';
 

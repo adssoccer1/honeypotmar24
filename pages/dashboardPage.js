@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import Layout from '../components/Layout';
-import Dashboard from '../components/Dashboard';
+import NavigationBar from '../components/NavigationBar';
+import Dashboard from '../components/dashboards/Dashboard';
 import { useAuthContext } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import { Layout as AntLayout } from 'antd';
@@ -20,9 +20,9 @@ const DashboardPage = () => {
   return (
     <AntLayout>
       <Content>
-        <Layout>
+        <NavigationBar>
           {user && <Dashboard user={user} />}
-        </Layout>
+        </NavigationBar>
       </Content>
       <Footer style={{ textAlign: 'center' }}>
         {/* Footer content */}

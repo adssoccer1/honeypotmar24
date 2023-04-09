@@ -39,6 +39,7 @@ export default async function handler (req, res) {
 }
 
  /*
+        //example test db response
         //remove to fetch from real db
         const dealLst = [
             { id: 1, title: 'Deal 1', discount: '10%', advertiser: 'Advertiser 1' },

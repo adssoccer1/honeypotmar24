@@ -1,7 +1,8 @@
 // pages/login.js
 
+//this page is currently not used - instead trying to handle login + registration through components - not a separate page
 import React, { useState } from 'react';
-import Layout from '../components/Layout';
+import Layout from '../components/NavigationBar';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');

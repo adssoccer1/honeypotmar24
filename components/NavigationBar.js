@@ -1,5 +1,8 @@
 // components/Layout.js
 
+
+//This Layout component pretty much just renders the navbar logic for when a user is logged in or out
+
 import React, { useContext } from 'react';
 import { AuthContext } from '../contexts/AuthContext';
 import { Menu } from 'antd';
@@ -7,7 +10,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
 
-const Layout = ({ children }) => {
+const NavigationBar = ({ children }) => {
   const { user, login, logout, loginWithGoogle } = useContext(AuthContext);
 
   const handleLoginWithGoogle = async () => {
@@ -55,4 +58,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export default Layout;
+export default NavigationBar;

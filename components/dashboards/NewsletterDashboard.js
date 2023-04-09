@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
-import { db } from '../lib/firebase';
+import { db } from '../../lib/firebase';
 import { List, Typography, Row, Col, Card } from 'antd';
 
 const { Text } = Typography;
 
-const AdvertiserDashboard = ({ user }) => {
+const NewsletterDashboard = ({ user }) => {
   const [completedSales, setCompletedSales] = useState([]);
-  const [deals, setDeals] = useState([]);
+  const [uniqueLinks, setUniqueLinks] = useState([]);
 
   useEffect(() => {
     if (user) {
@@ -16,27 +16,24 @@ const AdvertiserDashboard = ({ user }) => {
   }, [user]);
 
   const fetchData = async () => {
-
     const completedSalesRef = ref(db, 'completedSales');
-    const dealsRef = ref(db, 'deals');
-    console.log("fetch data for addvertser dashboard");
-    const completedSalesQuery = query(completedSalesRef, orderByChild('advertiserId'), equalTo(user.id));
-    const dealsQuery = query(dealsRef, orderByChild('advertiserId'), equalTo(user.id));
+    const uniqueLinksRef = ref(db, 'uniqueLinks');
+
+    const completedSalesQuery = query(completedSalesRef, orderByChild('newsletterId'), equalTo(user.id));
+    const uniqueLinksQuery = query(uniqueLinksRef, orderByChild('newsletterId'), equalTo(user.id));
 
     const completedSalesSnapshot = await get(completedSalesQuery);
-    const dealsSnapshot = await get(dealsQuery);
-    console.log("completedSalesSnapshot addvertser dashboard", completedSalesSnapshot);
-    console.log("dealsSnapshot addvertser dashboard", dealsSnapshot);
+    const uniqueLinksSnapshot = await get(uniqueLinksQuery);
 
     if (completedSalesSnapshot.exists()) {
       setCompletedSales(Object.values(completedSalesSnapshot.val()));
     }
-    if (dealsSnapshot.exists()) {
-      setDeals(Object.values(dealsSnapshot.val()));
+    if (uniqueLinksSnapshot.exists()) {
+      setUniqueLinks(Object.values(uniqueLinksSnapshot.val()));
     }
   };
 
-  // Render logic specific to advertiser accounts
+  // Render logic specific to newsletter accounts
   const totalAmount = completedSales.reduce((acc, sale) => acc + sale.amount, 0);
 
   return (
@@ -52,7 +49,6 @@ const AdvertiserDashboard = ({ user }) => {
         <Col span={12}>
           <Card title="Data">
             <p>Total Sales Amount: ${totalAmount.toFixed(2)}</p>
-            <p>Total Amount to be billed: ${totalAmount.toFixed(2)}</p>
           </Card>
         </Col>
       </Row>
@@ -65,12 +61,12 @@ const AdvertiserDashboard = ({ user }) => {
           </List.Item>
         )}
       />
-      <h2>Deals</h2>
+      <h2>Unique Links</h2>
       <List
-        dataSource={deals}
-        renderItem={(deal, index) => (
+        dataSource={uniqueLinks}
+        renderItem={(link, index) => (
           <List.Item key={index}>
-            <Text>{JSON.stringify(deal)}</Text>
+            <Text>{JSON.stringify(link)}</Text>
           </List.Item>
         )}
       />
@@ -78,4 +74,4 @@ const AdvertiserDashboard = ({ user }) => {
   );
 };
 
-export default AdvertiserDashboard;
+export default NewsletterDashboard;

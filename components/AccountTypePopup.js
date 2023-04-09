@@ -1,5 +1,8 @@
 // components/AccountTypePopup.js
 
+
+//This class should eventually be deleted. it allows for users in test environment to create a new user account and 
+//specify if they want a newsletter or advertiser account.
 import React, { useState } from 'react';
 
 const AccountTypePopup = ({ user, onSave, onCancel }) => {

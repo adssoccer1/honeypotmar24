@@ -1,6 +1,8 @@
 // pages/api/shopifyApp.js
 // pages/api/shopifyApp.js
 
+//this class listens to the shopify app for install and unistall events so that we can track if an advertiser removes or installs the
+//app and updated the verification accordingly.
 import { ref, get, update, orderByChild, equalTo, push, query, set } from 'firebase/database';
 import { db } from '../../lib/firebase';
 

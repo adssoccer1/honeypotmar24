@@ -1,10 +1,11 @@
 // components/Leaderboard.js
 
+//This is the leaderboard, where deals are posted. We should probably build a "Deal" component the we can use to render each deal
 import React, { useEffect, useState } from 'react';
 import { Button, List } from 'antd';
 import ClaimOffer from './ClaimOffer';
 import SubmitDeal from './SubmitDeal';
-import FinishAdvertiserRegistration from './FinishAdvertiserRegistration';
+import FinishAdvertiserRegistration from '../advertiserRegistration/FinishAdvertiserRegistration';
 
 const Leaderboard = ({ user }) => {
   const [deals, setDeals] = useState([]);

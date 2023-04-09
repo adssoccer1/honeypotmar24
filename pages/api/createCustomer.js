@@ -1,4 +1,7 @@
 // pages/api/create_customer.js
+
+//this class is under development and will be used for stripe integration
+
 import { getSession } from 'next-auth/react';
 import stripePackage from 'stripe';
 import { get } from 'firebase/database';

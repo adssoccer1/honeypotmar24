@@ -1,3 +1,19 @@
+
+
+/*
+My idea here is to build one componenet that can take care of verification (complete the advertiser user's signup) at any point in the 
+site. So the user can pretty much choose when they want to complete all the necessary account information to verify them before they start posting deals
+
+i would imaging the being 
+ 1) a pop-up that pops-up when an clicks on "Post deal" but are not verified
+ 2) part of the advertiser dashboard
+
+ it will pull all user information we have on the user, present it to the user in an incomplete form, and highlight the incomplete fields needed in red. 
+
+ Then the advertiser will have a clear idea of whats needed before they are verified
+*/
+
+
 import React from 'react';
 import { Modal, Form, Input, Button, message } from 'antd';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';

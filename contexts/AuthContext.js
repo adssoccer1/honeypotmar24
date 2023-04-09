@@ -1,5 +1,8 @@
 // contexts/AuthContext.js
 
+
+//This class currently handles the google auth sign in, but needs a lot of cleaning up. 
+
 import React, { createContext, useState, useContext } from 'react';
 import { auth, provider, GoogleAuthProvider, db } from '../lib/firebase';
 import {signInWithPopup, getAdditionalUserInfo } from "firebase/auth";
