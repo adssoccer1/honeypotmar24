@@ -19,12 +19,6 @@ const Layout = ({ children }) => {
     }
   };
 
-  const handleLogin = async () => {
-    // Call the login function from AuthContext with the user's email and password
-    // Replace 'userEmail' and 'userPassword' with the actual email and password from a form, for example
-    await login('userEmail', 'userPassword');
-  };
-
   const handleLogout = () => {
     logout();
   };
@@ -39,10 +33,7 @@ const Layout = ({ children }) => {
           </>
         ) : (
           <>
-            <Menu.Item onClick={handleLogin}>Login</Menu.Item>
-            {!user && (
-              <Menu.Item onClick={handleLoginWithGoogle}>Sign in with Google</Menu.Item>
-            )}
+            <Menu.Item onClick={handleLoginWithGoogle}>Sign in for access</Menu.Item>
           </>
         )}
         {user && (

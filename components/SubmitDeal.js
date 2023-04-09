@@ -6,6 +6,7 @@ const SubmitDeal = ({user}) => {
 
   console.log('user at subdeal', user);
 
+  //This class is used by advertiser accounts to submit deals to the leaderboard. 
   const [dealData, setDealData] = useState({
     // Initialize the deal data with the necessary fields
     title: '',

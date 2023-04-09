@@ -37,7 +37,7 @@ const NewsletterDashboard = ({ user }) => {
   const totalAmount = completedSales.reduce((acc, sale) => acc + sale.amount, 0);
 
   return (
-    <div>
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <h1>Dashboard</h1>
       <Row gutter={[16, 16]}>
         <Col span={12}>

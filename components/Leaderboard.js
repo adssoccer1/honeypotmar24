@@ -1,12 +1,15 @@
 // components/Leaderboard.js
 
 import React, { useEffect, useState } from 'react';
-import { List } from 'antd';
+import { Button, List } from 'antd';
 import ClaimOffer from './ClaimOffer';
 import SubmitDeal from './SubmitDeal';
+import FinishAdvertiserRegistration from './FinishAdvertiserRegistration';
 
 const Leaderboard = ({ user }) => {
   const [deals, setDeals] = useState([]);
+  const [showFinishRegistrationModal, setShowFinishRegistrationModal] = useState(false);
+  const [showSubmitDeal, setShowSubmitDeal] = useState(false);
 
   console.log("user at leaderboard: ", user);
 
@@ -19,8 +22,8 @@ const Leaderboard = ({ user }) => {
     fetchData();
   }, []);
 
+  //fetches the deals from out api route that gets all the deals from firebase
   const fetchDeals = async () => {
-    // Replace this function with a call to your API to fetch affiliate link deals
     try {
       const response = await fetch('/api/deals', { method: 'GET' });
       if (!response.ok) {
@@ -33,15 +36,37 @@ const Leaderboard = ({ user }) => {
     }
   };
 
+  const handlePostNewDeal = () => {
+    if (user.verified) {
+      setShowSubmitDeal(true);
+    } else {
+      setShowFinishRegistrationModal(true);
+    }
+  };
+
+  const handleFinishRegistrationCancel = () => {
+    setShowFinishRegistrationModal(false);
+  };
+
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <h1>Live LeaderBoard</h1>
-      {/*advertisers allowed to post deals only */
+      {//render this if user logged in as advertiser account only. 
       user && user.accountType === 'advertiser' && (
-        <SubmitDeal user={user} deals={deals} />
+        <div>
+          <Button type="primary" onClick={handlePostNewDeal}>
+            Post New Deal
+          </Button>
+          <FinishAdvertiserRegistration
+            user={user} 
+            open={showFinishRegistrationModal}
+            onCancel={handleFinishRegistrationCancel}
+          />
+          {showSubmitDeal && <SubmitDeal user={user} deals={deals} />}
+        </div>
       )}
-      {/* newsletters allowed to get deals only */
-      deals ? (
+      {/* newsletters allowed to get deals only */}
+      {deals ? (
         <List
           itemLayout="horizontal"
           dataSource={deals}
@@ -49,7 +74,7 @@ const Leaderboard = ({ user }) => {
           renderItem={(deal, index) => (
             <List.Item
               key={deal.id}
-              actions={
+              actions={ //if logged in as a newsletter then the claim offer button will appear. 
                 user && user.accountType === 'newsletter'
                   ? [<ClaimOffer key={deal.id} deal={deal} user={user} />]
                   : []

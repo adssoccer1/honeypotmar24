@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
+  //This class is used by newsletter accounts to get deals from the leaderboard. 
 const ClaimButton = styled.button`
   /* Add claim button styles here */
 `;

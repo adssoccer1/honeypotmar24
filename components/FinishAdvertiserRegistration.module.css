@@ -1,0 +1,26 @@
+.verifyPaymentButton {
+    background-color: #1890ff;
+    border-color: #1890ff;
+    color: #fff;
+    margin-top: 16px;
+  }
+  
+  .verifyPaymentButton:hover,
+  .verifyPaymentButton:focus {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+    color: #fff;
+  }
+  
+  .submitButton {
+    background-color: #1890ff;
+    border-color: #1890ff;
+    color: #fff;
+  }
+  
+  .submitButton:hover,
+  .submitButton:focus {
+    background-color: #40a9ff;
+    border-color: #40a9ff;
+    color: #fff;
+  }

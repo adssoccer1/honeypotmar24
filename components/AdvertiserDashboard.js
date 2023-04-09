@@ -16,14 +16,17 @@ const AdvertiserDashboard = ({ user }) => {
   }, [user]);
 
   const fetchData = async () => {
+
     const completedSalesRef = ref(db, 'completedSales');
     const dealsRef = ref(db, 'deals');
-
+    console.log("fetch data for addvertser dashboard");
     const completedSalesQuery = query(completedSalesRef, orderByChild('advertiserId'), equalTo(user.id));
     const dealsQuery = query(dealsRef, orderByChild('advertiserId'), equalTo(user.id));
 
     const completedSalesSnapshot = await get(completedSalesQuery);
     const dealsSnapshot = await get(dealsQuery);
+    console.log("completedSalesSnapshot addvertser dashboard", completedSalesSnapshot);
+    console.log("dealsSnapshot addvertser dashboard", dealsSnapshot);
 
     if (completedSalesSnapshot.exists()) {
       setCompletedSales(Object.values(completedSalesSnapshot.val()));
@@ -37,7 +40,7 @@ const AdvertiserDashboard = ({ user }) => {
   const totalAmount = completedSales.reduce((acc, sale) => acc + sale.amount, 0);
 
   return (
-    <div>
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <h1>Dashboard</h1>
       <Row gutter={[16, 16]}>
         <Col span={12}>
