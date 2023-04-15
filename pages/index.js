@@ -5,6 +5,7 @@ import NavigationBar from '../components/NavigationBar';
 import Leaderboard from '../components/leaderboard/Leaderboard';
 import FooterTailwind from '../components/FooterTailwind';
 import LandingPage from '../components/landingpage/LandingPage';
+import NavigationBarV2 from '../components/NavigationBarV2';
 
 import { Layout as AntLayout } from 'antd';
 import { AuthContext } from '../contexts/AuthContext';
@@ -14,8 +15,7 @@ const { Header, Content, Footer } = AntLayout;
 const IndexPage = () => {
   const { user } = useContext(AuthContext);
   return (
-    <AntLayout>
-      {!user && (
+    <div>
         <Header
           style={{
             backgroundColor: 'white',
@@ -24,21 +24,20 @@ const IndexPage = () => {
             padding: '1rem', // Add some padding
           }}
         >
+          <NavigationBarV2 user={user}></NavigationBarV2>
+          {!user && (
           <LandingPage></LandingPage>
-          {/* This header section should be a landing page that explains the webapp to first time visitors. Also include a link to the shopify app.
-              The leaderboard will be featured underneath this "landing" page section and this section will disapear when a user logs in */ }
-          
+          )}
+
         </Header>
-      )}
-      <Content>
-        <NavigationBar>
-          <Leaderboard />
-        </NavigationBar>
-      </Content>
-      
+          
+        <div className="pt-16"> {/* Add padding to the top of the Leaderboard component */}
+          <Leaderboard user={user}/>
+        </div>      
+        
       <FooterTailwind></FooterTailwind>
 
-    </AntLayout>
+    </div>
   );
 };
 

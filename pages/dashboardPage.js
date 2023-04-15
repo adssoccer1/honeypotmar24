@@ -6,6 +6,7 @@ import FooterTailwind from '../components/FooterTailwind';
 import { useAuthContext } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import { Layout as AntLayout } from 'antd';
+import NavigationBarV2 from '../components/NavigationBarV2';
 
 const { Header, Content, Footer } = AntLayout;
 
@@ -20,16 +21,24 @@ const DashboardPage = () => {
   }, [user, router]);
 
   return (
-    <AntLayout>
-      <Content>
-        <NavigationBar>
-          {user && <Dashboard user={user} />}
-        </NavigationBar>
-        
-      </Content>
-      <FooterTailwind></FooterTailwind>
-    </AntLayout>
+    <div>
+      <Header
+          style={{
+            backgroundColor: 'white',
+            textAlign: 'center',
+            height: 'auto', // Set the height to auto
+            padding: '1rem', // Add some padding
+          }}
+        >
+        <NavigationBarV2 user={user}></NavigationBarV2>
+      </Header>
 
+      <Content>
+        {user && <Dashboard user={user} />}
+      </Content>
+      
+      <FooterTailwind></FooterTailwind>
+    </div>
   );
 };
 

@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, List } from 'antd';
 import ClaimOffer from './ClaimOffer';
 import SubmitDeal from './SubmitDeal';
+import Board from './Board';
+
 import FinishAdvertiserRegistration from '../advertiserRegistration/FinishAdvertiserRegistration';
 
 const Leaderboard = ({ user }) => {
