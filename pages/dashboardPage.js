@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import NavigationBar from '../components/NavigationBar';
 import Dashboard from '../components/dashboards/Dashboard';
+import FooterTailwind from '../components/FooterTailwind';
+
 import { useAuthContext } from '../contexts/AuthContext';
 import { useRouter } from 'next/router';
 import { Layout as AntLayout } from 'antd';
@@ -23,12 +25,11 @@ const DashboardPage = () => {
         <NavigationBar>
           {user && <Dashboard user={user} />}
         </NavigationBar>
+        
       </Content>
-      <Footer style={{ textAlign: 'center' }}>
-        {/* Footer content */}
-        Honeypot ©{new Date().getFullYear()} - Created by YourCompanyName
-      </Footer>
+      <FooterTailwind></FooterTailwind>
     </AntLayout>
+
   );
 };
 

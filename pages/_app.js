@@ -1,6 +1,8 @@
 // pages/_app.js
 
-import "../node_modules/antd/dist/reset.css";
+//import "../node_modules/antd/dist/reset.css";
+import '../styles/tailwind.css';
+
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 

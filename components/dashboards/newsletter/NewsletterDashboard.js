@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ref, get, query, orderByChild, equalTo } from 'firebase/database';
-import { db } from '../../lib/firebase';
+import { db } from '../../../lib/firebase';
 import { List, Typography, Row, Col, Card } from 'antd';
 
 const { Text } = Typography;
