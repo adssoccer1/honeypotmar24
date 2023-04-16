@@ -13,7 +13,7 @@
   ```
 */
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import NewsletterLeaderBoardVerification from './NewsletterLeaderBoardVerification';
+import NewsletterLeaderBoardVerification from './newsletterLeaderBoardVerification/NewsletterLeaderBoardVerification';
 
 const InputNewsletterInfoForm = ({ user }) => {
 

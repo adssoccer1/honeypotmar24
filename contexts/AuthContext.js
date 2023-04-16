@@ -1,17 +1,59 @@
 // contexts/AuthContext.js
 
 
-//This class currently handles the google auth sign in, but needs a lot of cleaning up. 
+//This class currently handles the google auth sign in
 
-import React, { createContext, useState, useContext } from 'react';
-import { auth, provider, GoogleAuthProvider, db } from '../lib/firebase';
-import {signInWithPopup, getAdditionalUserInfo, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { provider, GoogleAuthProvider, db } from '../lib/firebase';
+import {signInWithPopup, getAuth, getAdditionalUserInfo, onAuthStateChanged, sendEmailVerification, sendSignInLinkToEmail, isSignInWithEmailLink, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import { ref, set, get, update, once } from 'firebase/database';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+
+  const auth = getAuth();
+
+
+  useEffect(() => {
+    let reloadInterval;
+  
+    if (user && !user.emailVerified) {
+      reloadInterval = setInterval(async () => {
+        console.log('Reloading user...');
+        await auth.currentUser.reload();
+  
+        if (auth.currentUser.emailVerified) {
+          console.log('User email verified!');
+  
+          const userRef = ref(db, `users/${auth.currentUser.uid}`);
+          const updatedUser = { ...user, emailVerified: true };
+          await update(userRef, updatedUser);
+          setUser(updatedUser);
+        }
+      }, 5000); // Adjust the interval as needed, currently set to 5 seconds
+    } else {
+      clearInterval(reloadInterval);
+    }
+  
+    return () => {
+      clearInterval(reloadInterval);
+    };
+  }, [user, auth]);
+  
+
+  const sendVerificationEmail = async (email) => {
+    console.log("verification email sendng");
+
+    try {
+      await sendEmailVerification(auth.currentUser);
+      console.log("verification email sent");
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+      throw error;
+    }
+  };
 
   const signUpWithGoogleAuth = async (accountType) => {
     console.log("inside authcontext signInWithGoogle, accountType, ", accountType);
@@ -209,7 +251,7 @@ const signIn = async (email, password) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, logout, register, setUser, signUpWithGoogleAuth, signInWithGoogleAuth, signIn }}>
+    <AuthContext.Provider value={{ user, auth,logout, register, setUser, signUpWithGoogleAuth, signInWithGoogleAuth, signIn, sendVerificationEmail }}>
       {children}
     </AuthContext.Provider>
   );   

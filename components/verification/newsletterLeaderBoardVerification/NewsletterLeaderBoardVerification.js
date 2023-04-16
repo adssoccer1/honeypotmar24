@@ -15,8 +15,10 @@
 import { CheckIcon } from '@heroicons/react/24/solid';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { AuthContext } from '../../contexts/AuthContext';
+import { AuthContext } from '../../../contexts/AuthContext';
 import React, { useContext, useState } from 'react';
+import EmailAddressVerification from './EmailAddressVerification';
+import ContentURLVerification from './ContentURLVerification';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
@@ -221,8 +223,8 @@ const NewsletterLeaderBoardVerification = () => {
           </p>
 
           <div className="mt-10 space-y-8 border-b border-gray-900/10 pb-12 sm:space-y-0 sm:divide-y sm:divide-gray-900/10 sm:border-t sm:pb-0">
-            {renderInputField('email', 'Email address')}
-            {renderInputField('newsletterUrl', 'Link to content you create')}
+            <EmailAddressVerification></EmailAddressVerification>
+            <ContentURLVerification></ContentURLVerification>
             {renderInputField('stripeVerification', "Stripe verification - we'll only ever pay you!")}
           </div>
         </div>
