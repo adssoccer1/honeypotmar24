@@ -15,12 +15,18 @@
 import { CheckIcon } from '@heroicons/react/24/solid';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
-import { useState } from 'react';
+import { AuthContext } from '../../contexts/AuthContext';
+import React, { useContext, useState } from 'react';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 
-const NewsletterLeaderBoardVerification = ({ user }) => {
+const NewsletterLeaderBoardVerification = () => {
+    const { user, setUser } = useContext(AuthContext);
+
+    const updateUser = (updatedUser) => {
+        setUser(updatedUser);
+      };
 
     const [formData, setFormData] = useState({
         email: user.email || '',
@@ -33,6 +39,31 @@ const NewsletterLeaderBoardVerification = ({ user }) => {
         setFormData({ ...formData, [name]: value });
         console.log("contentUrl now updatng, ", newsletterUrl);
     };
+    
+    const onClickAddLater = async () => {
+
+        console.log("at onClickAddLater,formData,  ");
+    
+          const response = await fetch('/api/updateUser', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              user: user,
+              fieldToUpdate: "stripeAddLater",
+              newValue: true
+            })
+          });
+    
+          const data = await response.json();
+          if (data.success) {
+            updateUser({ ...user, "stripeAddLater" : true });
+          }
+          
+          console.log("you updated the user data to!!! : ", data, " and a new user update " , user);
+        }
+
 
     const handleSubmit = async (e, fieldName) => {
         e.preventDefault();
@@ -56,7 +87,11 @@ const NewsletterLeaderBoardVerification = ({ user }) => {
           });
     
           const data = await response.json();
-          console.log("you updated the user data to!!! : ", data );
+          if (data.success) {
+            updateUser({ ...user, [fieldName]: formData[fieldName] });
+          }
+          
+          console.log("you updated the user data to!!! : ", data, " and a new user update " , user);
         }
     };
 
@@ -90,7 +125,7 @@ const NewsletterLeaderBoardVerification = ({ user }) => {
         const inputClass = isVerified
           ? 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
           : 'block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6';
-    
+      
         if (fieldName === 'stripeVerification') {
           return (
             <div className="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:py-6">
@@ -102,9 +137,16 @@ const NewsletterLeaderBoardVerification = ({ user }) => {
                   <form onSubmit={handleStripeSubmit} className="w-full">
                     <CardElement className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-red-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6" />
                     <button
+                        type="button"
+                        className="mt-3 bg-gray-400 text-white rounded-md px-3 py-1"
+                        onClick={onClickAddLater}
+                    >
+                        Add Later
+                    </button>
+                    <button
                       type="submit"
                       disabled={!stripe}
-                      className="mt-3 bg-indigo-600 text-white rounded-md px-3 py-1"
+                      className="ml-2 mt-3 bg-indigo-600 text-white rounded-md px-3 py-1"
                     >
                       Submit
                     </button>

@@ -55,7 +55,7 @@ const ClaimOffer = ({ deal, user }) => {
   };
 
   const handleClick = async () => {
-    if (!user.verified) {
+    if (!user.verified && !(user.email.length > 4 && user.newsletterUrl.length > 4 && user.stripeAddLater)) {
       console.log(
         'your newsletter account is not yet verified. please go to your dashboard and enter missing information before you can claimOffer ', showModal 
       );
@@ -65,7 +65,7 @@ const ClaimOffer = ({ deal, user }) => {
     if (uniqueLink) {
       console.log("link already generated: ", uniqueLink);
       copyToClipboard(uniqueLink);
-      alert('The unique redirect link has been copied to your clipboard!');
+      alert('The unique redirect link ('+uniqueLink.toString()+') has been copied to your clipboard! ');
     } else {
       if (user) { // TODO later change to user.verified
         console.log("new link to be generated");
@@ -75,7 +75,7 @@ const ClaimOffer = ({ deal, user }) => {
         copyToClipboard(link);
         console.log("new link now generated: ", link);
   
-        alert('The unique redirect link has been copied to your clipboard!');
+        alert('The unique redirect link ('+link.toString()+') has been copied to your clipboard! ');
       } else { 
             alert('An error occurred while generating the unique link. Please try again.');
         }
@@ -91,7 +91,7 @@ const ClaimOffer = ({ deal, user }) => {
         <ClaimButton onClick={handleClick}>
         Claim Offer
         </ClaimButton>
-        {uniqueLink && <p> You have a link for this offer! {uniqueLink}</p>}
+        {/*uniqueLink && <p> You have a link for this offer! {uniqueLink}</p> */}
         {showModal && <Modal user={user} showModal={showModal} closeModal={closeModal} />}
 
     </div>
