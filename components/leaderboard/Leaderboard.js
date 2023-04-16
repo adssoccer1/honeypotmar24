@@ -54,6 +54,7 @@ const Leaderboard = ({ user }) => {
   return (
     <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
       <h1>Live LeaderBoard</h1>
+      <Board user={user} deals={deals}></Board>
       {//render this if user logged in as advertiser account only. 
       user && user.accountType === 'advertiser' && (
         <div>
@@ -68,7 +69,7 @@ const Leaderboard = ({ user }) => {
           {showSubmitDeal && <SubmitDeal user={user} deals={deals} />}
         </div>
       )}
-      {/* newsletters allowed to get deals only */}
+      {/* newsletters allowed to get deals only 
       {deals ? (
         <List
           itemLayout="horizontal"
@@ -102,6 +103,7 @@ const Leaderboard = ({ user }) => {
       ) : (
         <></>
       )}
+      */}
     </div>
   );
 };

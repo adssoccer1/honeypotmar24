@@ -2,8 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Modal from '../verification/Modal'; // Adjust the path if necessary
 
-  //This class is used by newsletter accounts to get deals from the leaderboard. 
+ //This class is used by newsletter accounts to get deals from the leaderboard. 
 const ClaimButton = styled.button`
   /* Add claim button styles here */
 `;
@@ -43,6 +44,7 @@ const copyToClipboard = (text) => {
 
 const ClaimOffer = ({ deal, user }) => {
   const [uniqueLink, setUniqueLink] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
   }, [deal, user]);
@@ -53,9 +55,12 @@ const ClaimOffer = ({ deal, user }) => {
   };
 
   const handleClick = async () => {
-    if(!user.verified){
-      console.log("your newsletter account is not yet verified. please go to your dashboard and enter missing information before you can claimOffer");
-      return
+    if (!user.verified) {
+      console.log(
+        'your newsletter account is not yet verified. please go to your dashboard and enter missing information before you can claimOffer ', showModal 
+      );
+      setShowModal(true);
+      return;
     }
     if (uniqueLink) {
       console.log("link already generated: ", uniqueLink);
@@ -77,12 +82,18 @@ const ClaimOffer = ({ deal, user }) => {
     }
   };
 
+  const closeModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <div>
         <ClaimButton onClick={handleClick}>
         Claim Offer
         </ClaimButton>
         {uniqueLink && <p> You have a link for this offer! {uniqueLink}</p>}
+        {showModal && <Modal user={user} showModal={showModal} closeModal={closeModal} />}
+
     </div>
   );
 };

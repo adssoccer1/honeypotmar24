@@ -144,7 +144,7 @@ const AuthProvider = ({ children }) => {
       const userData = {
         id: user.uid,
         email: user.email,
-        emailVerified: false,
+        emailVerified: true,
         verified: false,
         dateCreated: new Date().toJSON(),
         accountType,
@@ -159,6 +159,13 @@ const AuthProvider = ({ children }) => {
         numUniqueLinksGenerated:0,
         vipAccount:false,
         phoneNumber: "",
+        leaderboardVerified: false,
+        stripeVerified: false,
+        shopurlpending: false,
+        stripeId: "",
+        country: "",
+        optInMarketingEmails: true,
+        about:""
         // Include any other relevant user data here
       };
 
@@ -261,6 +268,14 @@ const AuthProvider = ({ children }) => {
         numUniqueLinksGenerated:0,
         vipAccount:false,
         phoneNumber: "",
+        leaderboardVerified: false,
+        stripeVerified: false,
+        shopurlpending: false,
+        stripeId: "",
+        country: "",
+        optInMarketingEmails: true,
+        about:""
+
         // Include any other relevant user data here
       };
 
