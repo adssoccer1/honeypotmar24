@@ -1,18 +1,18 @@
 // components/Leaderboard.js
 
-//This is the leaderboard, where deals are posted. We should probably build a "Deal" component the we can use to render each deal
 import React, { useEffect, useState } from 'react';
-import { Button, List } from 'antd';
 import ClaimOffer from './ClaimOffer';
 import SubmitDeal from './SubmitDeal';
 import Board from './Board';
-
 import FinishAdvertiserRegistration from '../advertiserRegistration/FinishAdvertiserRegistration';
+import AdvertiserLeaderBoardVerification from '../verification/advertiserLeaderBoardVerification/AdvertiserLeaderBoardVerification'; // Import the RegisterModal component
+
+import SubmitDealModal from './SubmitDealModal';
 
 const Leaderboard = ({ user }) => {
   const [deals, setDeals] = useState([]);
   const [showFinishRegistrationModal, setShowFinishRegistrationModal] = useState(false);
-  const [showSubmitDeal, setShowSubmitDeal] = useState(false);
+  const [showSubmitDealModal, setSubmitDealModal] = useState(false); // Add a new state for the RegisterModal
 
   console.log("user at leaderboard: ", user);
 
@@ -40,70 +40,46 @@ const Leaderboard = ({ user }) => {
   };
 
   const handlePostNewDeal = () => {
-    if (user.verified) {
-      setShowSubmitDeal(true);
+    if (!user.verified) { //change this after dev testing
+      setSubmitDealModal(true)
     } else {
-      setShowFinishRegistrationModal(true);
+       // Show the RegisterModal if the user is not verified
     }
   };
 
-  const handleFinishRegistrationCancel = () => {
-    setShowFinishRegistrationModal(false);
-  };
-
   return (
-    <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <h1>Live LeaderBoard</h1>
-      <Board user={user} deals={deals}></Board>
-      {//render this if user logged in as advertiser account only. 
-      user && user.accountType === 'advertiser' && (
-        <div>
-          <Button type="primary" onClick={handlePostNewDeal}>
-            Post New Deal
-          </Button>
-          <FinishAdvertiserRegistration
-            user={user} 
-            open={showFinishRegistrationModal}
-            onCancel={handleFinishRegistrationCancel}
-          />
-          {showSubmitDeal && <SubmitDeal user={user} deals={deals} />}
-        </div>
-      )}
-      {/* newsletters allowed to get deals only 
-      {deals ? (
-        <List
-          itemLayout="horizontal"
-          dataSource={deals}
-          style={{ width: '80%', maxWidth: '800px' }}
-          renderItem={(deal, index) => (
-            <List.Item
-              key={deal.id}
-              actions={ //if logged in as a newsletter then the claim offer button will appear. 
-                user && user.accountType === 'newsletter'
-                  ? [<ClaimOffer key={deal.id} deal={deal} user={user} />]
-                  : []
-              }
-            >
-              <List.Item.Meta
-                title={
-                  <>
-                    <span>{index + 1}. </span>
-                    <span>{deal.title}</span>
-                  </>
-                }
-                description={`Commission percentage: ${deal.commission}% of driven revenue - Advertiser: ${deal.shopurl}`}
-              />
-              <div>
-                <p>Description: {deal.description}</p>
-                <p>Date: {deal.dateCreated}</p>
+    <div>
+      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <h1>Live LeaderBoard</h1>
+        <div className="px-4 sm:px-6 lg:px-8">
+
+          <div className="sm:flex sm:items-center">
+              <div className="sm:flex-auto">
+                <h1 className="text-base font-semibold leading-6 text-gray-900">Users</h1>
+                <p className="mt-2 text-sm text-gray-700">
+                  A list of all the users in your account including their name, title, email and role.
+                </p>
               </div>
-            </List.Item>
-          )}
-        />
-      ) : (
-        <></>
-      )}
-      */}
+          
+              {user && user.accountType === 'advertiser' && (
+                <div>
+                  <div className="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
+                    <button
+                      type="button"
+                      onClick={handlePostNewDeal}
+                      className="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Post New Deal
+                    </button>
+                  </div>
+                  {showSubmitDealModal && <SubmitDealModal user={user} showModal={showSubmitDealModal} closeModal={() => setSubmitDealModal(false)} />} {/* Render the RegisterModal and pass the closeModal prop */}
+              </div>
+              )}
+            </div>
+        </div>
+        <Board user={user} deals={deals}></Board>
+        </div>
+
     </div>
   );
 };

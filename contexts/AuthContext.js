@@ -4,17 +4,14 @@
 //This class currently handles the google auth sign in
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { provider, GoogleAuthProvider, db } from '../lib/firebase';
-import {signInWithPopup, getAuth, getAdditionalUserInfo, onAuthStateChanged, sendEmailVerification, sendSignInLinkToEmail, isSignInWithEmailLink, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
+import { provider, auth, GoogleAuthProvider, db } from '../lib/firebase';
+import {signInWithPopup, getAdditionalUserInfo, onAuthStateChanged, sendEmailVerification, sendSignInLinkToEmail, isSignInWithEmailLink, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword } from "firebase/auth";
 import { ref, set, get, update, once } from 'firebase/database';
 
 const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-
-  const auth = getAuth();
-
 
   useEffect(() => {
     let reloadInterval;
@@ -40,7 +37,7 @@ const AuthProvider = ({ children }) => {
     return () => {
       clearInterval(reloadInterval);
     };
-  }, [user, auth]);
+  }, [user]);
   
 
   const sendVerificationEmail = async (email) => {
@@ -61,16 +58,26 @@ const AuthProvider = ({ children }) => {
   
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+      if (user.email === null) {
+        console.error("Email is null");
+        // Show an error message to the user and ask them to try again or use a different Google account.
+      }
+      console.log("inside authcontext signInWithGoogle, result.user, ", user);
+
       // Check if the user already exists in the database
       const userRef2 = ref(db, `users/${user.uid}`);
       const snapshot = await get(userRef2);
       const existingUser = snapshot.val();
+      console.log("inside authcontext signInWithGoogle, existingUser, ", existingUser);
 
       // If the user already exists with the same email and account type, sign them in
       if (existingUser && existingUser.email === user.email && existingUser.accountType === accountType) {
+        console.log("here ", existingUser);
+
         setUser(existingUser);
         return { success: true };
       }
+      console.log("here ", auth.currentUser);
 
       await updateProfile(auth.currentUser, {
         accountType: accountType,
@@ -80,7 +87,7 @@ const AuthProvider = ({ children }) => {
       const userData = {
         id: user.uid,
         email: user.email,
-        emailVerified: true,
+        emailVerified: user.emailVerified,
         verified: false,
         dateCreated: new Date().toJSON(),
         accountType,
@@ -175,7 +182,7 @@ const AuthProvider = ({ children }) => {
       const userData = {
         id: user.uid,
         email: user.email,
-        emailVerified: false,
+        emailVerified: user.emailVerified,
         verified: false,
         dateCreated: new Date().toJSON(),
         accountType,
@@ -251,7 +258,7 @@ const signIn = async (email, password) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, auth,logout, register, setUser, signUpWithGoogleAuth, signInWithGoogleAuth, signIn, sendVerificationEmail }}>
+    <AuthContext.Provider value={{ user, auth ,logout, register, setUser, signUpWithGoogleAuth, signInWithGoogleAuth, signIn, sendVerificationEmail }}>
       {children}
     </AuthContext.Provider>
   );   

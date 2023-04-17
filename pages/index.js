@@ -9,11 +9,18 @@ import NavigationBarV2 from '../components/NavigationBarV2';
 
 import { Layout as AntLayout } from 'antd';
 import { AuthContext } from '../contexts/AuthContext';
+import { DealsContext } from '../contexts/DealsContext';
 
 const { Header, Content, Footer } = AntLayout;
 
 const IndexPage = () => {
   const { user } = useContext(AuthContext);
+  const { deals, uniqueLinks, uniqueDeals } = useContext(DealsContext);
+
+  console.log("hereeeeee, ", deals);
+  console.log("hereeeeee2, ", uniqueLinks);
+  console.log("hereeeeee3, ", uniqueDeals);
+
   return (
     <div>
         <Header

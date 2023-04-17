@@ -17,13 +17,13 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { AuthContext } from '../../../contexts/AuthContext';
 import React, { useContext, useState } from 'react';
-import EmailAddressVerification from './EmailAddressVerification';
-import ContentURLVerification from './ContentURLVerification';
+import EmailAddressVerification from '../newsletterLeaderBoardVerification/EmailAddressVerification';
+import ContentURLVerification from '../newsletterLeaderBoardVerification/ContentURLVerification';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
 
 
-const NewsletterLeaderBoardVerification = () => {
+const AdvertiserLeaderBoardVerification = () => {
     const { user, setUser } = useContext(AuthContext);
 
     const updateUser = (updatedUser) => {
@@ -182,4 +182,4 @@ const NewsletterLeaderBoardVerification = () => {
     </div>
   );
 }
-export default NewsletterLeaderBoardVerification;
+export default AdvertiserLeaderBoardVerification;

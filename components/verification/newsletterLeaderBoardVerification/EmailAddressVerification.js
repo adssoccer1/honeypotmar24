@@ -70,7 +70,7 @@ const EmailAddressVerification = () => {
                                 value={formData[fieldName]}
                                 onChange={handleChange}
                                 readOnly
-                            />
+                                />
                             <button
                                 onClick={handleSubmit}
                                 className="ml-2 px-4 py-2 border border-transparent text-sm font-medium
